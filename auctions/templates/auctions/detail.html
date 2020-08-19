@@ -59,6 +59,7 @@
                             <p style="margin-bottom: 2px">{{bid_message}}</p>
                         {% endif %}
                     </div>
+                    {% if auction.is_active %}
                     <form action="" method="post" novalidate>
                     {% csrf_token %}
                     <input type="hidden" name="form_type" value="form_bid">
@@ -74,6 +75,7 @@
                             <input type="submit" value="Place Bid"/>
                         </div>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
