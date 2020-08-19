@@ -1,0 +1,83 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <div class="comments-contanier">
+        <div class="social-container">
+            <ul class="list-group list-group-horizontal social-list">
+                <li><a href="#"></a><i class="fab fa-facebook-f"></i></li>
+                <li><a href="#"></a><i class="fab fa-twitter"></i></li>
+                <li><a href="#"></a><i class="fab fa-pinterest"></i></li>
+                <li><a href="#"></a><i class="fab fa-linkedin-in"></i></li>
+                <li><a href="#"></a><i class="fab fa-xing"></i></li>
+                <li><a href="#"></a><i class="fas fa-paper-plane"></i></li>
+            </ul>
+        </div>
+        <hr class="hr-comments">
+        <div class="comments-title login-title">
+            <h5>Register</h5>
+        </div>
+        <div class="login contact login-form" id="comment-form">
+            <form method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+                <div id="username" class="input-group input-group-icon">
+                    <input autofocus id="login" type="text" name="username" placeholder="Username" required/>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <div id="email" class="input-group input-group-icon">
+                    <input autofocus id="email" type="email" name="email" placeholder="Email Address" required/>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+                <div id="password" class="input-group input-group-icon">
+                    <input type="password" name="password" placeholder="Password" required/>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <div id="password" class="input-group input-group-icon">
+                    <input type="password" name="confirmation" placeholder="Confirm Password"/>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+                <i class="obligatorio"></i>
+                {% if message %}
+                    <span class="obligatorio" >{{message}}</span>
+                {% endif %}
+                
+                <div class="input-group send-reset">
+                    <input type="submit" value="Register">
+                </div>
+                <span>Already have an account?</span> <a href="{% url 'login' %}">Log In here.</a>
+            </form>
+        </div>
+    </div>
+
+    {% comment %} {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Register">
+    </form>
+
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a> {% endcomment %}
+
+{% endblock %}

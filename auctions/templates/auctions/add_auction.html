@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <div class="title">
+        <h2 style="padding-left:80px;">Create listing</h2>
+    </div>
+
+    <div class="comments-contanier comm">
+        <div class="contact" id="comment-form">
+            <form method="post" action="{% url 'new_auction' %}" novalidate>
+                {% csrf_token %}
+                <div class="msg">
+                {% for field in form %}
+                    {{field.label_tag}}
+                    {{field}}
+                    {{field.errors}}
+                {% endfor %}
+                    <input class="btn btn-primary" type="submit" value="Add Auction">
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

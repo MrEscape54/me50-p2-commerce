@@ -1,0 +1,106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Auctions{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+        <link href="{% static 'auctions/contact.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href={% static 'auctions//style.css' %}>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:800|Open+Sans+Condensed:300" rel="stylesheet">
+        <link rel="shortcut icon" href={% static 'auctions/images/favicon.ico' %} type="image/x-icon">
+        <script src="https://kit.fontawesome.com/80595e4515.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header>
+            <div class="search-scart">
+                <div class="ingreso">
+                    <nav class="navbar">
+                        {% if user.is_authenticated %}
+                            <p class="nav-item">Welcome, {{ user.username }}</p>
+                            <p class="pipe">|</p>
+                            <p class="nav-item"><a style="color:black;" href="{% url 'new_auction' %}">Create Listing</a></p>
+                            <p class="pipe">|</p>
+                            <p class="nav-item"><a href="{% url 'logout' %}">Logout</a></p>
+                        {% else %}  
+                            <p class="nav-item"><a href="{% url 'login' %}">Login</a></p>
+                            <p class="pipe">|</p>
+                            <p class="nav-item"><a href="{% url 'register' %}">Register</a></p>
+                        {% endif %}                                                                                   
+                    </nav>
+                </div>
+                <div class="scart">
+                    <a href="{% url 'watchlist' %}">Watchlist</a>
+                    <span class="badge">{{user.watchlist.count|default:'0'}}</span>
+                </div>                
+            </div>
+            <div class="logo-container">
+                <a href={% url 'index' %}><img src={% static 'auctions/images/logo.png' %} alt="logo"></a>
+                <h2>The Auctions</h2>
+            </div>
+            <div class="navbar">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0"  id="MainNav">
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}">Active Listings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'categories' %}">Categories</a>
+                    </li>
+                </ul>
+            </div>
+        </head>
+        <hr class="nav-division">
+        {% block body %}
+        {% endblock %}
+        <footer>
+            <div class="f-container">
+                <div class="primera-fila">
+                    <div class="foot-newsletter">
+                        <h6>Mailing List</h6>
+                        <form class="newsletter">
+                            <div class="input-wrap">
+                                <input type="text" placeholder="Enter your email" name="email">
+                                <button type="submit">Subscribe</button>
+                            </div>
+                        </form>
+                        <p style="margin-bottom: 0;">Get news about special auctions</p>
+                        <p id="users"></p>
+                    </div>
+
+                    <div class="foot-contacto">
+                        <h6>Contact</h6>
+                        <address>
+                            1350 Massachusetts Ave, Cambridge
+                        </address>
+                        <a style="display: block" href="tel:+54 11 4248 7979">+1 617-495-1000</a>
+                        <a href="mailto:info@nyd.com">info@theauctions.com</a>
+                    </div>
+                </div>
+
+                <div class="segunda-fila">
+                    <div class="foot-info">
+                        <h6>Information</h6>
+                        <ul>
+                            <li><a href="{% url 'index' %}">Home</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="foot-social">
+                        <h6>Follow Us</h6>
+                        <ul>
+                            <li id="instagram"><a href="#"><i class="fab fa-instagram fa-lg"></i> Instagram</a></li>
+                            <li id="facebook"><a href="#"><i class="fab fa-facebook fa-lg"></i> Facebook</a></li>
+                            <li id="pinterest"><a href="#"><i class="fab fa-pinterest fa-lg"></i> Pinterest</a></li>
+                            <li id="twitter"><a href="#"><i class="fab fa-twitter fa-lg"></i> Twitter</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="copyright">Copyright 2020 - The Auctions</p>
+            </div>
+        </footer>
+    </body>
+</html>

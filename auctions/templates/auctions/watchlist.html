@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+    <div class="title">
+        <h2>Watchlist</h2>
+    </div>
+    <div class="auction-list">
+        {% for watchlist in watchlisted %}
+            <div class="collections coll-aucitons">
+                <a href="{{ watchlist.auction.get_absolute_url }}">
+                {% if watchlist.auction.image %}
+                    <img class="foto" src="{{ watchlist.auction.image }}">
+                {% else %}
+                    <img class="foto"src="{% static 'auctions/images/image-not-found.png' %}">
+                {% endif %}
+                </a>
+                <p class="prod-description">{{ watchlist.auction.title }}</p>
+                <p class="prod-description desc">{{ watchlist.auction.description|truncatewords:10 }}</p>
+
+                <p class="prod-description prices">
+                    <strong>Current Price : $ 
+                    {% if  watchlist.auction.bid.last.bid %}
+                        {{ watchlist.auction.bid.last.bid|intcomma }}
+                    {% else %}
+                    {{ watchlist.auction.base_price|intcomma }}
+                    {% endif %}
+                    </strong>
+                </p>
+                <a class="boton-tr boton-tr-auctions" href="{{ watchlist.auction.get_absolute_url }}">See more</a>        
+            </div>
+        {%empty%}
+        <p style="padding-left:10px;">No items in your watchlist...</p>
+        {% endfor %}
+    </div>
+{% endblock %}

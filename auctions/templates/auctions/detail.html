@@ -1,0 +1,124 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+    <div class="detail-listing">
+    <h4>Listing: <span>{{auction.title}}</span></h4>
+
+        <div class="listing-container">
+            <div>
+                {% if auction.image %}
+                    <img class="foto" style="height:300px" src="{{ auction.image }}">   
+                {% else %}
+                    <img class="foto" src="{% static 'auctions/images/image-not-found.png' %}"> 
+                {% endif %}
+            </div>
+            <div class="listing-info">
+                <p class="prod-price">
+                    <strong>Current Price 
+                        {% if  auction.bid.last.bid %}
+                            : <span>$ {{ auction.bid.last.bid|intcomma }}</span>
+                        {% else %}
+                            (base): <span>$ {{ auction.base_price|intcomma }}</span>
+                        {% endif %}
+                    </strong>
+                </p>
+                <p class="listing-description">{{ auction.description }}</p>
+                
+                <p class="card-text"><small class="text-muted"> Created: {{auction.created}}</small></p>
+                {% if watchlisted and auction.is_active %}
+                    <a class="btn btn-secondary" href="{% url "remove_from_watchlist" %}?auction_id={{ auction.id }}">Remove from Watchlist</a>
+                {% elif not watchlisted and auction.is_active %}
+                    <a class="btn btn-secondary" href="{% url "add_to_watchlist" %}?auction_id={{ auction.id }}">Add to Watchlist</a>
+                {% endif %}
+                {% if auction.user == request.user and auction.is_active%}
+                    <a class="btn btn-danger" href="{% url "close_auction" %}?auction_id={{ auction.id }}">Close auction</a>
+                {% endif %}
+                    <hr>
+                <div class="auction-bid-form">
+                    {% if auction.bid.count > 0 %}
+                        <p class="card-text"><small><strong>{{auction.bid.count}} bid{{auction.bid.count|pluralize}}</strong> so far. </small></p>
+                        {% if auction.bid.last.user.username == user.username %}
+                            <spam class="card-text"><small>Your bid is the current bid</small></spam>
+                        {% endif %}
+                    {% else %}
+                        <p class="card-text"><small>No bids placed yet</small></p>
+                    {% endif %}
+
+                    {% if not auction.is_active %}
+                        {% if auction.bid.last.user == request.user%}
+                            <p class="result" style="color:green;">Won by you!</p>
+                        {% else %} 
+                            <p class="result">Closed</p>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="errorlist">
+                        {% if bid_message %}
+                            <p style="margin-bottom: 2px">{{bid_message}}</p>
+                        {% endif %}
+                    </div>
+                    <form action="" method="post" novalidate>
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="form_bid">
+                        <div class="msg">
+                            <div class="input-group">
+                                {{bid_form.bid}}
+                                {% if bid_form.bid.errors %}
+                                    {{bid_form.bid.errors}}
+                                {% endif %} 
+                            </div>
+                        </div>
+                        <div class="input-group send-reset">
+                            <input type="submit" value="Place Bid"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="hr-comments">
+    <div class="comments-contanier comm">
+        <div class="comments-title">
+            <h5>Comments</h5>
+        <hr class="hr-comments">
+        </div>
+        {% for comment in comments %}
+            <div class="comment-area">
+                <p class="comment-author"> {{ comment.user }}</p>
+                <p class="comment-time">{{ comment.created|date:"j F Y - G:i" }}</p>
+                <p class="comment-body">{{ comment.body}}</p>
+                <hr class="hr-comments">
+            </div>
+        {% empty %}
+            <p>No comments yet</p>
+        {% endfor %}
+        <div class="comments-title">
+            <h5>Post a comment</h5>
+        </div>
+
+        <div class="errorlist">
+        {% if comment_message %}
+        {{comment_message}}
+        {% endif %}
+        </div>
+        <div class="contact" id="comment-form">
+            <form method="post" action="" novalidate>
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="form_comment">
+                <div class="msg">
+                    <div class="input-group">
+                        {{comment_form.body}}
+                        {% if comment_form.body.errors %}
+                            {{comment_form.body.errors}}
+                        {% endif %} 
+                    </div>
+                </div>
+                <div class="input-group send-reset">
+                    <input type="submit" value="Send Comment">
+                </div>
+            </form>
+        </div>
+    </div>
+   {% endblock %}

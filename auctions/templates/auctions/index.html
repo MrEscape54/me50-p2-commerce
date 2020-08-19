@@ -1,0 +1,41 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block body %}
+    <div class="title">
+        {% if category %}
+            <h2>Active Listings in {{category}}</h2>
+        {% else %}
+            <h2>Active Listings</h2>
+        {% endif %}
+    </div>
+    <div class="auction-list">
+        {% for auction in auctions %}
+            <div class="collections coll-aucitons">
+                <a href="{{ auction.get_absolute_url }}">
+                {% if auction.image %}
+                    <img class="foto" src="{{ auction.image }}">
+                {% else %}
+                    <img class="foto"src="{% static 'auctions/images/image-not-found.png' %}">
+                {% endif %}
+                </a>
+                <p class="prod-description">{{ auction.title }}</p>
+                <p class="prod-description desc">{{ auction.description|truncatewords:10 }}</p>
+
+                <p class="prod-description prices">
+                    <strong>Current Price : $ 
+                    {% if  auction.bid.last.bid %}
+                        {{ auction.bid.last.bid|intcomma }}
+                    {% else %}
+                    {{ auction.base_price|intcomma }}
+                    {% endif %}
+                    </strong>
+                </p>
+                <a class="boton-tr boton-tr-auctions" href="{{ auction.get_absolute_url }}">See more</a>        
+            </div>
+        {% empty %}
+            <p>No auctions in {{category}}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
